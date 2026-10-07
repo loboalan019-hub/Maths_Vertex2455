@@ -1,0 +1,1010 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertex Degree — Study Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0f1e; --bg-2:#0d1428; --panel:#121a30; --panel-2:#182238;
+    --line:#26314f; --text:#e9edf8; --text-muted:#92a0c2;
+    --amber:#f2b33d; --amber-dim:#7a5f26; --teal:#3ddba0; --coral:#ff7a6b; --violet:#9b8cff;
+    --focus:#f2b33d;
+  }
+  :root:not([data-theme="light"]){ color-scheme: dark; }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#0a0f1e; --bg-2:#0d1428; --panel:#121a30; --panel-2:#182238;
+      --line:#26314f; --text:#e9edf8; --text-muted:#92a0c2;
+    }
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: radial-gradient(1200px 800px at 15% -10%, #14204a 0%, var(--bg) 55%) fixed, var(--bg);
+    color: var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    line-height:1.6;
+  }
+  .field{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.45; }
+  .wrap{ position:relative; z-index:1; max-width:980px; margin:0 auto; padding:34px 20px 70px; }
+
+  header.hero{ border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:18px; }
+  .hero-title{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(1.9rem,4vw,2.7rem); margin:0; letter-spacing:-0.01em; }
+  .hero-title span{ color:var(--amber); }
+  .hero-sub{ color:var(--text-muted); max-width:62ch; margin:10px 0 0; font-size:0.98rem; }
+
+  nav.secnav{
+    position:sticky; top:0; z-index:5;
+    display:flex; gap:6px; flex-wrap:wrap;
+    background: rgba(10,15,30,0.9); backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:10px 0 16px; margin-bottom:26px;
+  }
+  nav.secnav a{
+    font-family:'Space Grotesk',sans-serif; font-size:0.82rem; font-weight:600;
+    color:var(--text-muted); text-decoration:none;
+    border:1px solid var(--line); background:var(--panel-2);
+    padding:7px 12px; border-radius:100px;
+  }
+  nav.secnav a:hover{ color:var(--text); border-color:var(--amber); }
+  nav.secnav a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible, input:focus-visible{
+    outline:2px solid var(--focus); outline-offset:2px;
+  }
+
+  section{ margin-bottom:50px; scroll-margin-top:70px; }
+  .section-eyebrow{ font-family:'Space Grotesk',sans-serif; color:var(--violet); font-size:0.78rem; font-weight:600; margin:0 0 6px; }
+  h2{ font-family:'Space Grotesk',sans-serif; font-size:1.5rem; margin:0 0 14px; }
+  h3{ font-family:'Space Grotesk',sans-serif; font-size:1.05rem; margin:0 0 8px; }
+  p{ margin:0 0 12px; }
+  .muted{ color:var(--text-muted); }
+
+  .card{ background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--line); border-radius:14px; padding:20px; }
+  .card + .card{ margin-top:14px; }
+
+  .def-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:680px){ .def-grid{ grid-template-columns:1fr; } }
+  .def-card{ background:var(--panel-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .def-card h3{ margin-bottom:6px; }
+  .def-card .eq{
+    font-family:'Space Grotesk',sans-serif; background:#0d1428; border:1px solid var(--line);
+    border-radius:8px; padding:6px 10px; display:inline-block; margin-top:6px; font-size:0.92rem;
+  }
+
+  .example{ display:grid; grid-template-columns: 240px 1fr; gap:18px; align-items:start; }
+  @media (max-width:680px){ .example{ grid-template-columns:1fr; } }
+  .example svg{ width:100%; height:auto; background:#060a17; border:1px solid var(--line); border-radius:10px; }
+  .example ol{ margin:0; padding-left:20px; color:var(--text-muted); font-size:0.92rem; }
+  .example li{ margin-bottom:4px; }
+  .example .result{ margin-top:8px; font-size:0.92rem; }
+  .example .result strong{ color:var(--teal); }
+
+  ul.activity-list{ margin:0; padding-left:20px; }
+  ul.activity-list li{ margin-bottom:14px; }
+  ul.activity-list .goto{ font-size:0.82rem; color:var(--amber); text-decoration:none; border-bottom:1px dotted var(--amber); }
+
+  /* tool */
+  .toolbar{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:0.85rem;
+    border-radius:9px; padding:8px 13px; cursor:pointer; border:1px solid var(--line);
+    background:var(--panel-2); color:var(--text); transition:border-color .15s ease, background .15s ease;
+  }
+  .btn:hover{ border-color:var(--amber); }
+  .btn.active{ background:var(--amber); color:#16130a; border-color:var(--amber); }
+  .btn.primary{ background:var(--amber); color:#16130a; border-color:var(--amber); }
+  .btn:disabled{ opacity:.4; cursor:default; }
+  .toolbar-group{ display:flex; gap:6px; padding:4px; background:#0d1428; border:1px solid var(--line); border-radius:11px; }
+
+  .tool-layout{ display:grid; grid-template-columns:1.5fr 1fr; gap:16px; align-items:start; }
+  @media (max-width:760px){ .tool-layout{ grid-template-columns:1fr; } }
+  .stage{ background:#060a17; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  svg.graph{ display:block; width:100%; height:auto; cursor:crosshair; }
+  .edge{ stroke:var(--amber); stroke-width:2.2; }
+  .vstar{ fill:#1a2440; stroke:#3a4568; stroke-width:2; cursor:pointer; }
+  .vstar.selected{ fill:var(--amber); stroke:var(--amber); }
+  .vlabel{ fill:var(--text); font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600; pointer-events:none; }
+  .hint{ font-size:0.8rem; color:var(--text-muted); margin-top:8px; }
+
+  .stats-table{ width:100%; border-collapse:collapse; font-size:0.88rem; }
+  .stats-table th, .stats-table td{ text-align:left; padding:5px 6px; border-bottom:1px solid var(--line); }
+  .stats-table th{ color:var(--text-muted); font-weight:500; font-size:0.78rem; }
+  .kv-row{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line); font-size:0.88rem; }
+  .kv-row:last-child{ border-bottom:none; }
+  .kv-row .k{ color:var(--text-muted); }
+  .seq-chip{ font-family:'Space Grotesk',sans-serif; font-size:0.78rem; background:#0d1428; border:1px solid var(--line); border-radius:7px; padding:3px 8px; margin:2px 3px 0 0; display:inline-block; }
+  .flag{ font-size:0.78rem; padding:2px 8px; border-radius:100px; display:inline-block; margin:2px 4px 0 0; border:1px solid var(--line); }
+  .flag.yes{ color:var(--teal); border-color:var(--teal); }
+  .flag.no{ color:var(--text-muted); }
+
+  .quiz-box{ margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+  .quiz-row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+  .quiz-row input[type=number]{
+    width:80px; background:#0d1428; border:1px solid var(--line); color:var(--text);
+    border-radius:8px; padding:8px 10px; font-family:'Space Grotesk',sans-serif; font-size:1rem;
+  }
+  .quiz-feedback{ font-size:0.88rem; min-height:1.4em; margin-top:6px; }
+  .quiz-feedback.ok{ color:var(--teal); }
+  .quiz-feedback.bad{ color:var(--coral); }
+
+  /* exercises */
+  .ex-card{ background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:12px; }
+  .ex-card h3{ margin:0 0 6px; font-size:0.95rem; }
+  .ex-format{ font-size:0.78rem; color:var(--text-muted); margin:0 0 10px; }
+  .ex-parts{ display:flex; flex-wrap:wrap; gap:14px; margin-bottom:10px; }
+  .ex-part{ display:flex; flex-direction:column; gap:4px; }
+  .ex-part label{ font-size:0.78rem; color:var(--text-muted); }
+  .ex-part input{ width:150px; background:#0d1428; border:1px solid var(--line); color:var(--text); border-radius:8px; padding:7px 10px; font-family:'Space Grotesk',sans-serif; font-size:0.95rem; }
+  .ex-part input.part-ok{ border-color:var(--teal); }
+  .ex-part input.part-bad{ border-color:var(--coral); }
+  .ex-part input:disabled{ opacity:0.75; }
+  .ex-feedback{ font-size:0.86rem; margin-top:8px; min-height:1.3em; }
+  .ex-feedback .part-ok{ color:var(--teal); margin-right:10px; }
+  .ex-feedback .part-bad{ color:var(--coral); margin-right:10px; }
+  .ex-explain{ font-size:0.86rem; color:var(--text-muted); margin-top:10px; padding-top:10px; border-top:1px solid var(--line); display:none; }
+  .ex-explain.show{ display:block; }
+  .ex-explain strong{ color:var(--teal); }
+
+  footer{ margin-top:30px; text-align:center; color:var(--text-muted); font-size:0.8rem; }
+</style>
+</head>
+<body>
+
+<svg class="field" width="100%" height="100%" aria-hidden="true">
+  <defs>
+    <pattern id="stars" width="140" height="140" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="18" r="1" fill="#fff" opacity="0.5"/>
+      <circle cx="70" cy="60" r="1.4" fill="#fff" opacity="0.35"/>
+      <circle cx="110" cy="20" r="1" fill="#fff" opacity="0.4"/>
+      <circle cx="40" cy="100" r="1.2" fill="#fff" opacity="0.3"/>
+      <circle cx="95" cy="120" r="1" fill="#fff" opacity="0.45"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#stars)"/>
+</svg>
+
+<div class="wrap">
+  <header class="hero">
+    <h1 class="hero-title">Vertex <span>Degree</span> — Study Deck</h1>
+    <p class="hero-sub">Definitions, worked examples, guided activities, a free-form graph builder, and exercises — everything needed to identify, calculate, and analyze vertex degree across different graphs.</p>
+  </header>
+
+  <nav class="secnav">
+    <a href="#definitions">Definitions</a>
+    <a href="#examples">Examples</a>
+    <a href="#activities">Activities</a>
+    <a href="#tool">Interactive tool</a>
+    <a href="#exercises">Exercises</a>
+  </nav>
+
+  <!-- ================= DEFINITIONS ================= -->
+  <section id="definitions">
+    <p class="section-eyebrow">01</p>
+    <h2>Definitions</h2>
+    <p class="muted">The core vocabulary used everywhere below — refer back here while working through examples and exercises.</p>
+
+    <div class="def-grid">
+      <div class="def-card">
+        <h3>Degree of a vertex</h3>
+        <p class="muted">deg(v) is the number of edges incident to v. A loop at v is counted twice.</p>
+        <span class="eq">deg(v) = edges touching v</span>
+      </div>
+      <div class="def-card">
+        <h3>Handshake lemma</h3>
+        <p class="muted">Summing every vertex's degree counts each edge exactly twice (once per endpoint).</p>
+        <span class="eq">Σ deg(v) = 2·|E|</span>
+      </div>
+      <div class="def-card">
+        <h3>Degree sequence</h3>
+        <p class="muted">The list of all vertex degrees, usually written in non-increasing order — e.g. (3, 2, 2, 1).</p>
+      </div>
+      <div class="def-card">
+        <h3>Minimum / maximum degree</h3>
+        <p class="muted">δ(G) is the smallest degree in the graph, Δ(G) the largest. Every degree lies between them.</p>
+      </div>
+      <div class="def-card">
+        <h3>Regular graph</h3>
+        <p class="muted">G is k-regular if every vertex has degree exactly k. Then |E| = nk / 2.</p>
+      </div>
+      <div class="def-card">
+        <h3>Isolated &amp; pendant vertices</h3>
+        <p class="muted">deg(v) = 0 → isolated vertex (no connections). deg(v) = 1 → pendant vertex, or leaf.</p>
+      </div>
+      <div class="def-card">
+        <h3>In-degree / out-degree (digraphs)</h3>
+        <p class="muted">In a directed graph, deg⁺(v) counts edges leaving v and deg⁻(v) counts edges entering v.</p>
+        <span class="eq">Σ deg⁺(v) = Σ deg⁻(v) = |E|</span>
+      </div>
+      <div class="def-card">
+        <h3>Odd-degree corollary</h3>
+        <p class="muted">Since Σ deg(v) is always even, the number of vertices with odd degree in any graph is always even.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXAMPLES ================= -->
+  <section id="examples">
+    <p class="section-eyebrow">02</p>
+    <h2>Worked examples</h2>
+
+    <div class="card">
+      <div class="example">
+        <svg viewBox="0 0 220 200" role="img" aria-label="Graph with five vertices and five edges">
+          <line class="edge" x1="110" y1="20" x2="30" y2="80"/>
+          <line class="edge" x1="110" y1="20" x2="190" y2="80"/>
+          <line class="edge" x1="30" y1="80" x2="30" y2="160"/>
+          <line class="edge" x1="30" y1="80" x2="190" y2="80"/>
+          <line class="edge" x1="190" y1="80" x2="110" y2="160"/>
+          <circle class="vstar" cx="110" cy="20" r="10"/><text class="vlabel" x="110" y="24" text-anchor="middle">A</text>
+          <circle class="vstar" cx="30" cy="80" r="10"/><text class="vlabel" x="30" y="84" text-anchor="middle">B</text>
+          <circle class="vstar" cx="190" cy="80" r="10"/><text class="vlabel" x="190" y="84" text-anchor="middle">C</text>
+          <circle class="vstar" cx="30" cy="160" r="10"/><text class="vlabel" x="30" y="164" text-anchor="middle">D</text>
+          <circle class="vstar" cx="110" cy="160" r="10"/><text class="vlabel" x="110" y="164" text-anchor="middle">E</text>
+        </svg>
+        <div>
+          <h3>Example 1 — a simple graph</h3>
+          <ol>
+            <li>List edges: A–B, A–C, B–C, B–D, C–E</li>
+            <li>Count how many of these touch each vertex</li>
+          </ol>
+          <div class="result">
+            deg(A)=2, deg(B)=3, deg(C)=3, deg(D)=1, deg(E)=1.<br>
+            Degree sequence: (3, 3, 2, 1, 1). <strong>Sum = 10 = 2×5</strong>, matching |E| = 5. D and E are pendant vertices.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="example">
+        <svg viewBox="0 0 220 200" role="img" aria-label="Graph with a loop at one vertex">
+          <line class="edge" x1="60" y1="60" x2="160" y2="60"/>
+          <line class="edge" x1="60" y1="60" x2="60" y2="150"/>
+          <line class="edge" x1="160" y1="60" x2="60" y2="150"/>
+          <path class="edge" d="M 160 60 C 195 30, 195 90, 160 60" fill="none"/>
+          <circle class="vstar" cx="60" cy="60" r="10"/><text class="vlabel" x="60" y="64" text-anchor="middle">P</text>
+          <circle class="vstar" cx="160" cy="60" r="10"/><text class="vlabel" x="160" y="64" text-anchor="middle">Q</text>
+          <circle class="vstar" cx="60" cy="150" r="10"/><text class="vlabel" x="60" y="154" text-anchor="middle">R</text>
+        </svg>
+        <div>
+          <h3>Example 2 — a loop</h3>
+          <ol>
+            <li>Edges: P–Q, P–R, Q–R, and a loop at Q</li>
+            <li>The loop contributes 2 to deg(Q), not 1</li>
+          </ol>
+          <div class="result">
+            deg(P)=2, deg(Q)=2+2=4, deg(R)=2.<br>
+            Degree sequence: (4, 2, 2). <strong>Sum = 8 = 2×4</strong>, matching |E| = 4 (3 ordinary edges + 1 loop).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="example">
+        <svg viewBox="0 0 220 200" role="img" aria-label="Regular graph, a 4-cycle with both diagonals">
+          <line class="edge" x1="110" y1="20" x2="200" y2="100"/>
+          <line class="edge" x1="200" y1="100" x2="110" y2="180"/>
+          <line class="edge" x1="110" y1="180" x2="20" y2="100"/>
+          <line class="edge" x1="20" y1="100" x2="110" y2="20"/>
+          <line class="edge" x1="110" y1="20" x2="110" y2="180"/>
+          <line class="edge" x1="20" y1="100" x2="200" y2="100"/>
+          <circle class="vstar" cx="110" cy="20" r="10"/><text class="vlabel" x="110" y="24" text-anchor="middle">1</text>
+          <circle class="vstar" cx="200" cy="100" r="10"/><text class="vlabel" x="200" y="104" text-anchor="middle">2</text>
+          <circle class="vstar" cx="110" cy="180" r="10"/><text class="vlabel" x="110" y="184" text-anchor="middle">3</text>
+          <circle class="vstar" cx="20" cy="100" r="10"/><text class="vlabel" x="20" y="104" text-anchor="middle">4</text>
+        </svg>
+        <div>
+          <h3>Example 3 — a regular graph</h3>
+          <ol>
+            <li>Every vertex connects to all three others: this is K₄</li>
+            <li>Each vertex has the same degree</li>
+          </ol>
+          <div class="result">
+            deg(1)=deg(2)=deg(3)=deg(4)=3. K₄ is <strong>3-regular</strong>.<br>
+            Check: |E| = nk/2 = 4×3/2 = 6, which matches the 6 edges drawn.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ACTIVITIES ================= -->
+  <section id="activities">
+    <p class="section-eyebrow">03</p>
+    <h2>Experiments &amp; activities</h2>
+    <div class="card">
+      <ul class="activity-list">
+        <li><strong>Handshake pairing.</strong> Without drawing anything: every edge has exactly two ends, so if you listed every vertex's degree and added them up, each edge gets counted once at each end. That's why the total is always even — try to construct a degree sequence with an odd sum in the <a class="goto" href="#tool">tool</a> and see why you can't ever finish it.</li>
+        <li><strong>Build to a target.</strong> Pick a degree sequence such as (3, 3, 2, 2) and try to build a graph matching it in the <a class="goto" href="#tool">interactive tool</a>. Then try (3, 3, 3, 1) — does it work? Compare what makes one sequence achievable and the other not.</li>
+        <li><strong>Find the regular graphs.</strong> Using presets or manual edges, build a 2-regular graph on 5 vertices, then a 3-regular graph on 6 vertices. For each, verify |E| = nk/2 using the live stats panel.</li>
+        <li><strong>Trees and leaves.</strong> Build a tree (a connected graph with no cycles) on 6 vertices. Confirm it has exactly 5 edges, that Σdeg(v) = 10, and count how many pendant vertices (leaves) it has.</li>
+        <li><strong>Networks around you.</strong> Model a small network you know — a group chat, a set of linked devices, a communication network — as a graph, with a vertex per member and an edge per direct link. Build it in the tool and identify which vertex has the highest degree (the most direct connections) and which is isolated, if any.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= TOOL ================= -->
+  <section id="tool">
+    <p class="section-eyebrow">04</p>
+    <h2>Interactive tool</h2>
+    <p class="muted">Build any graph and get its degrees, degree sequence, and handshake check live.</p>
+
+    <div class="card">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <button class="btn active" id="modeVertex" title="Click empty space to place a vertex">Add vertex</button>
+          <button class="btn" id="modeEdgeAdd" title="Click two vertices to add an edge between them">Add edge</button>
+          <button class="btn" id="modeEdgeRemove" title="Click two vertices to remove an edge between them">Remove edge</button>
+          <button class="btn" id="modeDelete" title="Click a vertex to delete it">Delete vertex</button>
+        </div>
+        <button class="btn" id="btnClear">Clear</button>
+        <button class="btn" id="btnRandom">Random graph</button>
+      </div>
+      <div class="toolbar" style="margin-top:-6px;">
+        <span class="muted" style="font-size:0.8rem; align-self:center;">Presets:</span>
+        <button class="btn" id="presetK4">K₄</button>
+        <button class="btn" id="presetC5">Cycle C₅</button>
+        <button class="btn" id="presetStar">Star S₄</button>
+        <button class="btn" id="presetPath">Path P₅</button>
+      </div>
+
+      <div class="tool-layout">
+        <div>
+          <div class="stage">
+            <svg class="graph" id="toolSvg" viewBox="0 0 560 400" role="img" aria-label="Interactive graph canvas"></svg>
+          </div>
+          <p class="hint" id="modeHint">Click anywhere on the canvas to place a vertex.</p>
+        </div>
+
+        <div>
+          <h3>Live analysis</h3>
+          <div class="kv-row"><span class="k">Vertices (n)</span><span id="statN">0</span></div>
+          <div class="kv-row"><span class="k">Edges (|E|)</span><span id="statE">0</span></div>
+          <div class="kv-row"><span class="k">Σ deg(v)</span><span id="statSum">0</span></div>
+          <div class="kv-row"><span class="k">Handshake check</span><span id="statCheck">—</span></div>
+          <div class="kv-row"><span class="k">δ(G) min / Δ(G) max</span><span id="statMinMax">—</span></div>
+          <div class="kv-row"><span class="k">Regular?</span><span id="statRegular">—</span></div>
+
+          <h3 style="margin-top:14px;">Degree sequence</h3>
+          <div id="seqChips"><span class="muted" style="font-size:0.85rem;">No vertices yet.</span></div>
+
+          <h3 style="margin-top:14px;">Per-vertex table</h3>
+          <table class="stats-table">
+            <thead><tr><th>Vertex</th><th>deg(v)</th><th>Type</th></tr></thead>
+            <tbody id="degTableBody"></tbody>
+          </table>
+
+          <div class="quiz-box">
+            <h3>Quiz me on this graph</h3>
+            <p class="muted" style="font-size:0.85rem;">Uses whatever graph is currently on the canvas.</p>
+            <button class="btn primary" id="btnQuizStart">New question</button>
+            <div class="quiz-row" id="quizAnswerRow" style="display:none;">
+              <span id="quizQuestion" style="font-size:0.9rem;"></span>
+              <input type="number" id="quizInput" min="0" aria-label="Your answer">
+              <button class="btn" id="btnQuizCheck">Check</button>
+            </div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXERCISES ================= -->
+  <section id="exercises">
+    <p class="section-eyebrow">05</p>
+    <h2>Exercise problems</h2>
+
+    <p class="muted" style="font-size:0.85rem; margin-top:-6px;">Fill in every answer below in the stated format, then submit all 8 at once for a score out of 8.</p>
+
+    <div class="ex-card" id="ex1">
+      <h3>1. A graph has 6 edges. What is Σ deg(v) over all its vertices?</h3>
+      <p class="ex-format">Format: a single whole number.</p>
+      <div class="ex-parts">
+        <div class="ex-part"><label for="ex1_a">Σ deg(v)</label><input type="text" inputmode="numeric" id="ex1_a" placeholder="e.g. 10"></div>
+      </div>
+      <div class="ex-feedback" id="ex1_fb"></div>
+      <div class="ex-explain" id="ex1_ex">By the handshake lemma, Σ deg(v) = 2|E| = 2×6 = <strong>12</strong>.</div>
+    </div>
+
+    <div class="ex-card" id="ex2">
+      <h3>2. Is (1, 1, 1) a valid degree sequence for some graph?</h3>
+      <p class="ex-format">Format: type "yes" or "no".</p>
+      <div class="ex-parts">
+        <div class="ex-part"><label for="ex2_a">Valid?</label><input type="text" id="ex2_a" placeholder="yes / no"></div>
+      </div>
+      <div class="ex-feedback" id="ex2_fb"></div>
+      <div class="ex-explain" id="ex2_ex"><strong>No.</strong> Its sum is 3, which is odd — impossible for any graph, since Σ deg(v) must always be even.</div>
+    </div>
+
+    <div class="ex-card" id="ex3">
+      <h3>3. A tree has 9 vertices. How many edges does it have, and what is Σ deg(v)?</h3>
+      <p class="ex-format">Format: two whole numbers, one per box.</p>
+      <div class="ex-parts">
+        <div class="ex-part"><label for="ex3_a">Edges</label><input type="text" inputmode="numeric" id="ex3_a" placeholder="e.g. 7"></div>
+        <div class="ex-part"><label for="ex3_b">Σ deg(v)</label><input type="text" inputmode="numeric" id="ex3_b" placeholder="e.g. 14"></div>
+      </div>
+      <div class="ex-feedback" id="ex3_fb"></div>
+      <div class="ex-explain" id="ex3_ex">A tree on n vertices has n − 1 edges, so <strong>8 edges</strong>. By the handshake lemma, Σ deg(v) = 2×8 = <strong>16</strong>.</div>
+    </div>
+
+    <div class="ex-card" id="ex4">
+      <h3>4. Build a 4-regular graph on 5 vertices in the tool. How many edges does it have — and what is this graph normally called?</h3>
+      <p class="ex-format">Format: a whole number for the edge count, and a short name (e.g. "K5") for the graph.</p>
+      <div class="ex-parts">
+        <div class="ex-part"><label for="ex4_a">Edges</label><input type="text" inputmode="numeric" id="ex4_a" placeholder="e.g. 9"></div>
+        <div class="ex-part"><label for="ex4_b">Graph name</label><input type="text" id="ex4_b" placeholder="e.g. K5"></div>
+      </div>
+      <div class="ex-feedback" id="ex4_fb"></div>
+      <div class="ex-explain" id="ex4_ex">|E| = nk/2 = 5×4/2 = <strong>10 edges</strong>. Every pair of the 5 vertices is connected — that's the complete graph <strong>K₅</strong>.</div>
+    </div>
+
+    <div class="ex-card" id="ex5">
+      <h3>5. A graph has degree sequence (4, 3, 3, 2, 2, 2). Verify the handshake lemma is consistent with this sequence, and give |E|.</h3>
+      <p class="ex-format">Format: a single whole number for |E|.</p>
+      <div class="ex-parts">
+        <div class="ex-part"><label for="ex5_a">|E|</label><input type="text" inputmode="numeric" id="ex5_a" placeholder="e.g. 6"></div>
+      </div>
+      <div class="ex-feedback" id="ex5_fb"></div>
+      <div class="ex-explain" id="ex5_ex">Sum = 4+3+3+2+2+2 = 16, which is even, so it's consistent. |E| = 16/2 = <strong>8 edges</strong> (this alone confirms consistency, not that a graph with this exact sequence necessarily exists).</div>
+    </div>
+
+    <div class="ex-card" id="ex6">
+      <h3>6. In a directed graph modelling one-way links, Σ deg⁺(v) = 15. What is Σ deg⁻(v), and how many edges are there?</h3>
+      <p class="ex-format">Format: two whole numbers, one per box.</p>
+      <div class="ex-parts">
+        <div class="ex-part"><label for="ex6_a">Σ deg⁻(v)</label><input type="text" inputmode="numeric" id="ex6_a" placeholder="e.g. 10"></div>
+        <div class="ex-part"><label for="ex6_b">Edges</label><input type="text" inputmode="numeric" id="ex6_b" placeholder="e.g. 10"></div>
+      </div>
+      <div class="ex-feedback" id="ex6_fb"></div>
+      <div class="ex-explain" id="ex6_ex">Σ deg⁻(v) = Σ deg⁺(v) = <strong>15</strong>, and |E| = <strong>15</strong> (each directed edge contributes exactly one out-degree and one in-degree).</div>
+    </div>
+
+    <div class="ex-card" id="ex7">
+      <h3>7. A graph has 5 vertices, all of degree 2. Name the type of graph this must be.</h3>
+      <p class="ex-format">Format: a short name — e.g. "C5" or "cycle".</p>
+      <div class="ex-parts">
+        <div class="ex-part"><label for="ex7_a">Graph type</label><input type="text" id="ex7_a" placeholder="e.g. C5"></div>
+      </div>
+      <div class="ex-feedback" id="ex7_fb"></div>
+      <div class="ex-explain" id="ex7_ex">It's a <strong>2-regular graph on 5 vertices</strong> — a single cycle, <strong>C₅</strong> (five vertices connected in a ring). Try the "Cycle C₅" preset in the tool to see it.</div>
+    </div>
+
+    <div class="ex-card" id="ex8">
+      <h3>8. True or false: a graph can have exactly one vertex of odd degree.</h3>
+      <p class="ex-format">Format: type "true" or "false".</p>
+      <div class="ex-parts">
+        <div class="ex-part"><label for="ex8_a">Your answer</label><input type="text" id="ex8_a" placeholder="true / false"></div>
+      </div>
+      <div class="ex-feedback" id="ex8_fb"></div>
+      <div class="ex-explain" id="ex8_ex"><strong>False.</strong> The number of odd-degree vertices in any graph is always even, since Σ deg(v) = 2|E| is even and each even-degree vertex contributes an even amount to that sum.</div>
+    </div>
+
+    <div class="card" id="examControls">
+      <div class="toolbar">
+        <button class="btn primary" id="btnSubmitAll">Submit all answers</button>
+      </div>
+      <div id="examResult" style="display:none;">
+        <p style="font-family:'Space Grotesk',sans-serif; font-size:1.15rem; margin:4px 0 12px;">Score: <strong id="examScore" style="color:var(--amber);">0</strong> / 8</p>
+        <div class="toolbar">
+          <button class="btn" id="btnTryAgain">Try again</button>
+          <button class="btn" id="btnShowAnswers">Show answers</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Study tool for vertex degree, degree sequences, and the handshake lemma.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  var svg = document.getElementById('toolSvg');
+  var VBW = 560, VBH = 400, R = 12;
+
+  var state = {
+    mode: 'vertex', // vertex | edgeAdd | edgeRemove | delete
+    vertices: [],   // {uid, x, y}
+    edges: [],      // [{a, b}] — a list, not a set, so parallel edges (and multiple loops) can coexist
+    nextEdgeId: 0,
+    nextUid: 0,
+    selected: -1,
+    quizVertex: -1,
+    quizAsked: new Set()
+  };
+
+  function degreesMap(){
+    var deg = {};
+    state.vertices.forEach(function(v){ deg[v.uid] = 0; });
+    state.edges.forEach(function(e){
+      if (e.a === e.b){
+        deg[e.a] = (deg[e.a]||0) + 2; // a loop counts twice toward its vertex's degree
+      } else {
+        deg[e.a] = (deg[e.a]||0) + 1;
+        deg[e.b] = (deg[e.b]||0) + 1;
+      }
+    });
+    return deg;
+  }
+
+  function clampPoint(x, y){
+    return { x: Math.max(20, Math.min(VBW-20, x)), y: Math.max(20, Math.min(VBH-20, y)) };
+  }
+
+  function svgPointFromEvent(evt){
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    var screenCTM = svg.getScreenCTM();
+    var loc = pt.matrixTransform(screenCTM.inverse());
+    return loc;
+  }
+
+  var MIN_SPACING = R*2 + 16; // minimum distance allowed between two vertex centers
+
+  function hitVertex(x, y){
+    for (var i=0;i<state.vertices.length;i++){
+      var v = state.vertices[i];
+      var dx = v.x - x, dy = v.y - y;
+      if (Math.sqrt(dx*dx+dy*dy) <= R+6) return v;
+    }
+    return null;
+  }
+
+  function nearestVertexDist(x, y){
+    var min = Infinity;
+    for (var i=0;i<state.vertices.length;i++){
+      var v = state.vertices[i];
+      var dx = v.x - x, dy = v.y - y;
+      var d = Math.sqrt(dx*dx+dy*dy);
+      if (d < min) min = d;
+    }
+    return min;
+  }
+
+  var flashTimer = null;
+  function flashHint(msg){
+    var hintEl = document.getElementById('modeHint');
+    if (!hintEl.dataset.original) hintEl.dataset.original = hintEl.textContent;
+    hintEl.textContent = msg;
+    hintEl.style.color = 'var(--coral)';
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(function(){
+      hintEl.textContent = hintEl.dataset.original;
+      hintEl.style.color = '';
+    }, 1700);
+  }
+
+  function addVertex(x, y){
+    var c = clampPoint(x,y);
+    state.vertices.push({ uid: state.nextUid++, x: c.x, y: c.y });
+    render();
+  }
+
+  function removeVertex(uid){
+    state.vertices = state.vertices.filter(function(v){ return v.uid !== uid; });
+    state.edges = state.edges.filter(function(e){ return e.a !== uid && e.b !== uid; });
+    if (state.selected === uid) state.selected = -1;
+    render();
+  }
+
+  function addEdge(a, b){
+    // Always appends a new edge — this is what allows parallel edges (e.g. two separate
+    // connections between 1 and 2) and multiple loops at the same vertex.
+    state.edges.push({ id: state.nextEdgeId++, a: a, b: b });
+  }
+
+  function removeOneEdge(a, b){
+    // Removes a single edge matching this unordered pair (the most recently added one),
+    // leaving any other parallel edges between the same two vertices intact.
+    for (var i = state.edges.length - 1; i >= 0; i--){
+      var e = state.edges[i];
+      if ((e.a === a && e.b === b) || (e.a === b && e.b === a)){
+        state.edges.splice(i, 1);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function canvasClick(evt){
+    var p = svgPointFromEvent(evt);
+    var hit = hitVertex(p.x, p.y);
+
+    if (state.mode === 'vertex'){
+      if (hit) return;
+      if (nearestVertexDist(p.x, p.y) < MIN_SPACING){
+        flashHint('Too close to an existing vertex — click further away, or switch to Edge mode to connect it.');
+        return;
+      }
+      addVertex(p.x, p.y);
+      return;
+    }
+    if (state.mode === 'edgeAdd' || state.mode === 'edgeRemove'){
+      if (!hit){
+        if (state.selected !== -1){ state.selected = -1; render(); }
+        return;
+      }
+      if (state.selected === -1){
+        state.selected = hit.uid;
+      } else {
+        if (state.mode === 'edgeAdd'){
+          addEdge(state.selected, hit.uid);
+        } else {
+          var removed = removeOneEdge(state.selected, hit.uid);
+          if (!removed) flashHint('No edge there to remove.');
+        }
+        state.selected = -1;
+      }
+      render();
+      return;
+    }
+    if (state.mode === 'delete'){
+      if (hit) removeVertex(hit.uid);
+      return;
+    }
+  }
+
+  function setMode(m){
+    state.mode = m;
+    state.selected = -1;
+    ['modeVertex','modeEdgeAdd','modeEdgeRemove','modeDelete'].forEach(function(id){
+      document.getElementById(id).classList.remove('active');
+    });
+    var hint = document.getElementById('modeHint');
+    clearTimeout(flashTimer);
+    hint.style.color = '';
+    if (m === 'vertex'){ document.getElementById('modeVertex').classList.add('active'); hint.textContent = 'Click anywhere on the canvas to place a vertex.'; }
+    if (m === 'edgeAdd'){ document.getElementById('modeEdgeAdd').classList.add('active'); hint.textContent = 'Click a vertex, then a second vertex, to add an edge — click the same vertex twice to add a loop. Click again for a parallel edge. Click empty space to cancel.'; }
+    if (m === 'edgeRemove'){ document.getElementById('modeEdgeRemove').classList.add('active'); hint.textContent = 'Click a vertex, then a second vertex, to remove one edge between them — or the same vertex twice to remove a loop.'; }
+    if (m === 'delete'){ document.getElementById('modeDelete').classList.add('active'); hint.textContent = 'Click a vertex to delete it and its edges.'; }
+    hint.dataset.original = hint.textContent;
+    render();
+  }
+
+  function labelFor(index){ return String(index + 1); }
+
+  function render(){
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var edgeGroup = el('g', {});
+    var vertGroup = el('g', {});
+
+    var LOOP_R = 14;
+    var LOOP_GAP = 6;
+
+    // Group edges by unordered vertex pair so parallel edges (and stacked loops)
+    // can be fanned out instead of drawn on top of each other.
+    var groups = {};
+    state.edges.forEach(function(e){
+      var k = e.a <= e.b ? e.a + '-' + e.b : e.b + '-' + e.a;
+      (groups[k] = groups[k] || []).push(e);
+    });
+
+    Object.keys(groups).forEach(function(k){
+      var list = groups[k];
+      var first = list[0];
+      var a = state.vertices.find(function(v){ return v.uid === first.a; });
+      var b = state.vertices.find(function(v){ return v.uid === first.b; });
+      if (!a || !b) return;
+
+      if (first.a === first.b){
+        // one or more loops at the same vertex: stack them outward at increasing radius
+        list.forEach(function(e, i){
+          var r = LOOP_R + i * (LOOP_R + LOOP_GAP);
+          var cx = a.x + (R + r) * Math.cos(-Math.PI/4);
+          var cy = a.y + (R + r) * Math.sin(-Math.PI/4);
+          edgeGroup.appendChild(el('circle', { class:'edge', fill:'none', cx:cx, cy:cy, r:r }));
+        });
+        return;
+      }
+
+      if (list.length === 1){
+        edgeGroup.appendChild(el('line', { class:'edge', x1:a.x, y1:a.y, x2:b.x, y2:b.y }));
+        return;
+      }
+
+      // multiple parallel edges between the same two vertices: bow them apart
+      var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+      var dx = b.x - a.x, dy = b.y - a.y;
+      var len = Math.sqrt(dx*dx + dy*dy) || 1;
+      var nx = -dy / len, ny = dx / len; // unit normal
+      var n = list.length;
+      list.forEach(function(e, i){
+        var offset = (i - (n - 1) / 2) * 18;
+        if (offset === 0){
+          edgeGroup.appendChild(el('line', { class:'edge', x1:a.x, y1:a.y, x2:b.x, y2:b.y }));
+        } else {
+          var cx = mx + nx * offset, cy = my + ny * offset;
+          edgeGroup.appendChild(el('path', {
+            class: 'edge', fill: 'none',
+            d: 'M ' + a.x + ' ' + a.y + ' Q ' + cx + ' ' + cy + ' ' + b.x + ' ' + b.y
+          }));
+        }
+      });
+    });
+
+    state.vertices.forEach(function(v, idx){
+      var cls = 'vstar' + (v.uid === state.selected ? ' selected' : '');
+      vertGroup.appendChild(el('circle', { class:cls, cx:v.x, cy:v.y, r:R }));
+      var t = el('text', { class:'vlabel', x:v.x, y:v.y+4, 'text-anchor':'middle' });
+      t.textContent = labelFor(idx);
+      vertGroup.appendChild(t);
+    });
+
+    svg.appendChild(edgeGroup);
+    svg.appendChild(vertGroup);
+    updateStats();
+  }
+
+  function updateStats(){
+    var n = state.vertices.length;
+    var deg = degreesMap();
+    var degList = state.vertices.map(function(v){ return deg[v.uid]; });
+    var sum = degList.reduce(function(a,b){ return a+b; }, 0);
+    var eCount = state.edges.length;
+
+    document.getElementById('statN').textContent = n;
+    document.getElementById('statE').textContent = eCount;
+    document.getElementById('statSum').textContent = sum;
+
+    var checkEl = document.getElementById('statCheck');
+    if (n === 0){ checkEl.textContent = '—'; }
+    else {
+      checkEl.textContent = sum + ' = 2×' + eCount + ' ✓';
+      checkEl.style.color = 'var(--teal)';
+    }
+
+    var minMaxEl = document.getElementById('statMinMax');
+    if (n === 0) minMaxEl.textContent = '—';
+    else minMaxEl.textContent = Math.min.apply(null, degList) + ' / ' + Math.max.apply(null, degList);
+
+    var regEl = document.getElementById('statRegular');
+    if (n === 0) regEl.textContent = '—';
+    else {
+      var allSame = degList.every(function(d){ return d === degList[0]; });
+      regEl.textContent = allSame ? (degList[0] + '-regular') : 'No';
+    }
+
+    var seqEl = document.getElementById('seqChips');
+    if (n === 0){ seqEl.innerHTML = '<span class="muted" style="font-size:0.85rem;">No vertices yet.</span>'; }
+    else {
+      var sorted = degList.slice().sort(function(a,b){ return b-a; });
+      seqEl.innerHTML = sorted.map(function(d){ return '<span class="seq-chip">'+d+'</span>'; }).join('');
+    }
+
+    var tbody = document.getElementById('degTableBody');
+    tbody.innerHTML = '';
+    state.vertices.forEach(function(v, idx){
+      var d = deg[v.uid];
+      var type = d === 0 ? 'isolated' : (d === 1 ? 'pendant' : '');
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + labelFor(idx) + '</td><td>' + d + '</td><td class="muted">' + type + '</td>';
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('btnQuizStart').disabled = n < 2;
+  }
+
+  // ---- presets ----
+  function circleLayout(n, cx, cy, r){
+    var arr = [];
+    for (var i=0;i<n;i++){
+      var ang = (Math.PI*2*i/n) - Math.PI/2;
+      arr.push({ uid: state.nextUid++, x: cx + r*Math.cos(ang), y: cy + r*Math.sin(ang) });
+    }
+    return arr;
+  }
+
+  function loadGraph(vertices, edgePairs){
+    state.vertices = vertices;
+    state.edges = edgePairs.map(function(p){
+      return { id: state.nextEdgeId++, a: vertices[p[0]].uid, b: vertices[p[1]].uid };
+    });
+    state.selected = -1;
+    resetQuiz();
+    render();
+  }
+
+  function resetQuiz(){
+    state.quizVertex = -1;
+    state.quizAsked = new Set();
+    document.getElementById('quizAnswerRow').style.display = 'none';
+    document.getElementById('quizFeedback').textContent = '';
+    document.getElementById('quizFeedback').className = 'quiz-feedback';
+  }
+
+  // ---- wire up ----
+  document.getElementById('modeVertex').addEventListener('click', function(){ setMode('vertex'); });
+  document.getElementById('modeEdgeAdd').addEventListener('click', function(){ setMode('edgeAdd'); });
+  document.getElementById('modeEdgeRemove').addEventListener('click', function(){ setMode('edgeRemove'); });
+  document.getElementById('modeDelete').addEventListener('click', function(){ setMode('delete'); });
+
+  document.getElementById('btnClear').addEventListener('click', function(){
+    state.vertices = []; state.edges = []; state.selected = -1;
+    resetQuiz(); render();
+  });
+
+  document.getElementById('btnRandom').addEventListener('click', function(){
+    var n = 6;
+    var vs = circleLayout(n, VBW/2, VBH/2 + 10, 130);
+    var pairs = [];
+    for (var i=0;i<n;i++) for (var j=i+1;j<n;j++) if (Math.random() < 0.35) pairs.push([i,j]);
+    if (pairs.length === 0) pairs.push([0,1]);
+    loadGraph(vs, pairs);
+  });
+
+  document.getElementById('presetK4').addEventListener('click', function(){
+    var vs = circleLayout(4, VBW/2, VBH/2 + 10, 120);
+    var pairs = [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]];
+    loadGraph(vs, pairs);
+  });
+  document.getElementById('presetC5').addEventListener('click', function(){
+    var vs = circleLayout(5, VBW/2, VBH/2 + 10, 130);
+    var pairs = [[0,1],[1,2],[2,3],[3,4],[4,0]];
+    loadGraph(vs, pairs);
+  });
+  document.getElementById('presetStar').addEventListener('click', function(){
+    var vs = circleLayout(5, VBW/2, VBH/2 + 10, 130);
+    // vertex 0 at center visually isn't from circleLayout; rebuild manually
+    var center = { uid: state.nextUid++, x: VBW/2, y: VBH/2 + 10 };
+    var outer = circleLayout(4, VBW/2, VBH/2 + 10, 130);
+    var vs2 = [center].concat(outer);
+    var pairs = [[0,1],[0,2],[0,3],[0,4]];
+    loadGraph(vs2, pairs);
+  });
+  document.getElementById('presetPath').addEventListener('click', function(){
+    var vs = [];
+    for (var i=0;i<5;i++){
+      vs.push({ uid: state.nextUid++, x: 80 + i*100, y: VBH/2 + 10 });
+    }
+    var pairs = [[0,1],[1,2],[2,3],[3,4]];
+    loadGraph(vs, pairs);
+  });
+
+  svg.addEventListener('click', canvasClick);
+
+  // ---- quiz ----
+  document.getElementById('btnQuizStart').addEventListener('click', function(){
+    if (state.vertices.length < 2) return;
+    if (state.quizAsked.size >= state.vertices.length) state.quizAsked = new Set();
+    var candidates = state.vertices.filter(function(v){ return !state.quizAsked.has(v.uid); });
+    var pick = candidates[Math.floor(Math.random()*candidates.length)];
+    state.quizVertex = pick.uid;
+    state.quizAsked.add(pick.uid);
+    var idx = state.vertices.findIndex(function(v){ return v.uid === pick.uid; });
+    document.getElementById('quizQuestion').textContent = 'deg(' + labelFor(idx) + ') = ?';
+    document.getElementById('quizAnswerRow').style.display = 'flex';
+    document.getElementById('quizFeedback').textContent = '';
+    document.getElementById('quizFeedback').className = 'quiz-feedback';
+    document.getElementById('quizInput').value = '';
+    document.getElementById('quizInput').focus();
+  });
+
+  document.getElementById('btnQuizCheck').addEventListener('click', function(){
+    var deg = degreesMap();
+    var correct = deg[state.quizVertex];
+    var val = parseInt(document.getElementById('quizInput').value, 10);
+    var fb = document.getElementById('quizFeedback');
+    if (val === correct){
+      fb.textContent = 'Correct — degree is ' + correct + '.';
+      fb.className = 'quiz-feedback ok';
+    } else {
+      fb.textContent = 'Not quite — the actual degree is ' + correct + '.';
+      fb.className = 'quiz-feedback bad';
+    }
+  });
+
+  render();
+
+  // ---- exercises: enter-and-check ----
+  var EXERCISES = {
+    ex1: { parts: [ { id:'ex1_a', type:'number', accept:[12] } ] },
+    ex2: { parts: [ { id:'ex2_a', type:'text', accept:['no'] } ] },
+    ex3: { parts: [ { id:'ex3_a', type:'number', accept:[8] }, { id:'ex3_b', type:'number', accept:[16] } ] },
+    ex4: { parts: [ { id:'ex4_a', type:'number', accept:[10] }, { id:'ex4_b', type:'text', accept:['k5','completegraphk5','k_5','k5graph'] } ] },
+    ex5: { parts: [ { id:'ex5_a', type:'number', accept:[8] } ] },
+    ex6: { parts: [ { id:'ex6_a', type:'number', accept:[15] }, { id:'ex6_b', type:'number', accept:[15] } ] },
+    ex7: { parts: [ { id:'ex7_a', type:'text', accept:['c5','cycle','cyclegraph','5cycle','pentagon','pentagongraph'] } ] },
+    ex8: { parts: [ { id:'ex8_a', type:'text', accept:['false'] } ] }
+  };
+
+  function normalizeText(s){ return String(s).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+
+  var allExInputs = document.querySelectorAll('.ex-card input');
+  var examSubmitted = false;
+
+  function gradeExercise(exId){
+    var cfg = EXERCISES[exId];
+    var allOk = true;
+    var lines = [];
+
+    cfg.parts.forEach(function(part){
+      var inputEl = document.getElementById(part.id);
+      var raw = inputEl.value.trim();
+      var ok = false;
+
+      if (raw !== ''){
+        if (part.type === 'number'){
+          var val = parseFloat(raw);
+          ok = !isNaN(val) && part.accept.indexOf(val) !== -1;
+        } else {
+          ok = part.accept.indexOf(normalizeText(raw)) !== -1;
+        }
+      }
+      if (!ok) allOk = false;
+
+      inputEl.classList.remove('part-ok', 'part-bad');
+      inputEl.classList.add(ok ? 'part-ok' : 'part-bad');
+
+      var labelEl = inputEl.parentElement.querySelector('label');
+      var labelText = labelEl ? labelEl.textContent : 'Answer';
+      lines.push('<span class="' + (ok ? 'part-ok' : 'part-bad') + '">' + (ok ? '✓' : '✗') + ' ' + labelText + '</span>');
+    });
+
+    document.getElementById(exId + '_fb').innerHTML = lines.join(' ');
+    return allOk;
+  }
+
+  function submitAll(){
+    var ids = Object.keys(EXERCISES);
+    var score = 0;
+    ids.forEach(function(exId){ if (gradeExercise(exId)) score++; });
+
+    document.getElementById('examScore').textContent = score;
+    document.getElementById('examResult').style.display = 'block';
+    document.getElementById('btnSubmitAll').style.display = 'none';
+    examSubmitted = true;
+
+    allExInputs.forEach(function(inp){ inp.disabled = true; });
+  }
+
+  function tryAgain(){
+    allExInputs.forEach(function(inp){
+      inp.value = '';
+      inp.disabled = false;
+      inp.classList.remove('part-ok', 'part-bad');
+    });
+    Object.keys(EXERCISES).forEach(function(exId){
+      document.getElementById(exId + '_fb').innerHTML = '';
+      document.getElementById(exId + '_ex').classList.remove('show');
+    });
+    document.getElementById('examResult').style.display = 'none';
+    document.getElementById('btnSubmitAll').style.display = '';
+    examSubmitted = false;
+  }
+
+  function showAnswers(){
+    Object.keys(EXERCISES).forEach(function(exId){
+      document.getElementById(exId + '_ex').classList.add('show');
+    });
+  }
+
+  document.getElementById('btnSubmitAll').addEventListener('click', submitAll);
+  document.getElementById('btnTryAgain').addEventListener('click', tryAgain);
+  document.getElementById('btnShowAnswers').addEventListener('click', showAnswers);
+
+  allExInputs.forEach(function(inp){
+    inp.addEventListener('keydown', function(ev){
+      if (ev.key === 'Enter' && !examSubmitted){ ev.preventDefault(); submitAll(); }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
+
+</body></html>
